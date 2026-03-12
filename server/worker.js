@@ -47,7 +47,7 @@ const worker = new Worker(
         
         const embeddings = {                                // Passing the chunks to local HuggingFace embedding model
             embedDocuments: async (texts) => {
-                const output = await extractor(texts, {     // embeddings object has the vectors
+                const output = await extractor(texts, {     
                     pooling: 'mean',
                     normalize: true,
                 });
@@ -73,9 +73,9 @@ const worker = new Worker(
         }
         );
         console.log(`Im here now 5:`);
-        await vectorStore.addDocuments(splitDocs);      // Loading the vecotors in the Qdrant vector DB
-        console.log(`Completed`);
-    }, 
+        await vectorStore.addDocuments(splitDocs);      // addDocuments(splitDocs) method internally calls 
+        console.log(`Completed`);                       // embedQuery and embedDocuments methods which are 
+    },                                                  // stored in embeddings object which is passed to vectorStore
     {
         concurrency: 100,
         connection: {
