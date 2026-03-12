@@ -39,7 +39,11 @@ const worker = new Worker(
         const splitDocs = await splitter.splitDocuments(docs);  // Chunking the documents
         console.log(`Chunks created:`, splitDocs.length);
 
-        
+        // const embeddings = new OpenAIEmbeddings({
+        //     model: 'text-embedding-3-small',
+        //     apiKey: '',
+        //     timeout: 20000,
+        // });
         
         const embeddings = {                                // Passing the chunks to local HuggingFace embedding model
             embedDocuments: async (texts) => {

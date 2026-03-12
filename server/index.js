@@ -5,7 +5,9 @@ import { Queue } from 'bullmq';
 import Groq from 'groq-sdk';
 import { pipeline } from '@huggingface/transformers';
 import { QdrantVectorStore } from '@langchain/qdrant';
+import dotenv from "dotenv";
 
+dotenv.config();
 
 //const upload = multer({ dest: 'uploads/' })
 
@@ -49,9 +51,8 @@ const extractor = await pipeline(
     'Xenova/all-MiniLM-L6-v2'
 );
 
-
 const client = new Groq({
-    apiKey: '',
+    apiKey: process.env.GROQ_API_KEY,
 });
 
   app.get('/chat', async (req, res) => {
