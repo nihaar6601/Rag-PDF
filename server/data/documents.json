@@ -1,0 +1,50 @@
+{
+  "doc_1793052015396_osfhf": {
+    "id": "doc_1793052015396_osfhf",
+    "name": "Admit_Letter_NiharChaudhari.pdf",
+    "filename": "Admit_Letter_NiharChaudhari.pdf",
+    "path": "/Users/niharchaudhari/Desktop/Rag-PDF/server/uploads/1793052015389-329999503-Admit_Letter_NiharChaudhari.pdf",
+    "size": 257055,
+    "status": "ready",
+    "stage": "ready",
+    "progress": 100,
+    "error": null,
+    "pageCount": 3,
+    "chunkCount": 10,
+    "createdAt": "2026-10-26T22:00:15.396Z",
+    "updatedAt": "2026-10-26T22:00:16.244Z",
+    "jobId": "9"
+  },
+  "doc_1793056238545_i8cxz": {
+    "id": "doc_1793056238545_i8cxz",
+    "name": "Student-Authorisation-Letter (1).pdf",
+    "filename": "Student-Authorisation-Letter (1).pdf",
+    "path": "/Users/niharchaudhari/Desktop/Rag-PDF/server/uploads/1793056238528-333619032-Student-Authorisation-Letter (1).pdf",
+    "size": 174471,
+    "status": "ready",
+    "stage": "ready",
+    "progress": 100,
+    "error": null,
+    "pageCount": 1,
+    "chunkCount": 2,
+    "createdAt": "2026-10-26T23:10:38.546Z",
+    "updatedAt": "2026-10-26T23:12:13.667Z",
+    "jobId": "10"
+  },
+  "doc_1793056348429_8low9": {
+    "id": "doc_1793056348429_8low9",
+    "name": "Student-Authorisation-Letter (1).pdf",
+    "filename": "Student-Authorisation-Letter (1).pdf",
+    "path": "/Users/niharchaudhari/Desktop/Rag-PDF/server/uploads/1793056348425-474796995-Student-Authorisation-Letter (1).pdf",
+    "size": 174471,
+    "status": "ready",
+    "stage": "ready",
+    "progress": 100,
+    "error": null,
+    "pageCount": 1,
+    "chunkCount": 2,
+    "createdAt": "2026-10-26T23:12:28.430Z",
+    "updatedAt": "2026-10-26T23:12:28.565Z",
+    "jobId": "11"
+  }
+}

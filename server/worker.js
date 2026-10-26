@@ -1,19 +1,17 @@
 import { Worker } from 'bullmq';
-import { QdrantVectorStore } from '@langchain/qdrant';
-import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
-import { pipeline } from '@huggingface/transformers';
-import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
-
-const extractor = await pipeline(
-  'feature-extraction',
-  'Xenova/all-MiniLM-L6-v2'
-);
+import { config } from './src/config.js';
+import { processPdfDocument } from './src/services/documentService.js';
+import { logger } from './src/services/logger.js';
 
 function parseJobPayload(data) {
   if (typeof data === 'string') {
-    return JSON.parse(data);
+    try {
+      return JSON.parse(data);
+    } catch {
+      return {};
+    }
   }
-  return data;
+  return data || {};
 }
 
 const worker = new Worker(
@@ -25,65 +23,34 @@ const worker = new Worker(
       throw new Error('The uploaded file path is missing.');
     }
 
-    const loader = new PDFLoader(data.path);
-    const docs = await loader.load();
+    const documentId = data.documentId || `doc_${job.id}`;
+    const filename = data.filename || 'Uploaded Document';
 
-    if (!docs.length) {
-      throw new Error('This PDF has no readable text.');
-    }
+    logger.info(`Worker processing job ${job.id} for document ${filename} (${documentId})`);
 
-    const splitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1000,
-      chunkOverlap: 200,
+    const result = await processPdfDocument({
+      documentId,
+      filePath: data.path,
+      filename,
+      onProgress: async (progressData) => {
+        await job.updateProgress(progressData);
+      },
     });
 
-    const splitDocs = await splitter.splitDocuments(docs);
-
-    const embeddings = {
-      embedDocuments: async (texts) => {
-        const output = await extractor(texts, {
-          pooling: 'mean',
-          normalize: true,
-        });
-        return output.tolist();
-      },
-      embedQuery: async (text) => {
-        const output = await extractor(text, {
-          pooling: 'mean',
-          normalize: true,
-        });
-        return output.tolist()[0];
-      },
-    };
-
-    const storeOptions = {
-      url: 'http://localhost:6333',
-      collectionName: 'langchainjs-testing',
-    };
-
-    try {
-      const vectorStore = await QdrantVectorStore.fromExistingCollection(
-        embeddings,
-        storeOptions
-      );
-      await vectorStore.addDocuments(splitDocs);
-    } catch {
-      await QdrantVectorStore.fromDocuments(splitDocs, embeddings, storeOptions);
-    }
+    return result;
   },
   {
     concurrency: 1,
-    connection: {
-      host: 'localhost',
-      port: 6379,
-    },
+    connection: config.REDIS,
   }
 );
 
 worker.on('failed', (job, err) => {
-  console.error(`Job ${job?.id} failed:`, err);
+  logger.error(`Job ${job?.id} failed:`, err);
 });
 
 worker.on('completed', (job) => {
-  console.log(`Job ${job.id} completed`);
+  logger.info(`Job ${job.id} completed successfully`);
 });
+
+export default worker;
